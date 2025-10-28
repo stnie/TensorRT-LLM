@@ -821,10 +821,15 @@ def create_py_executor_instance(
         peft_cache_config=peft_cache_config)
 
 
-def create_torch_sampler_args(mapping: Mapping, *, max_seq_len: int,
-                              max_batch_size: int,
-                              speculative_config: SpeculativeConfig,
-                              max_beam_width: int, use_overlap_scheduler: bool):
+def create_torch_sampler_args(
+    mapping: Mapping,
+    *,
+    max_seq_len: int,
+    max_batch_size: int,
+    speculative_config: SpeculativeConfig,
+    max_beam_width: int,
+    use_overlap_scheduler: bool,
+):
     max_num_sequences = max_batch_size * mapping.pp_size
     max_draft_len = (0 if speculative_config is None else
                      speculative_config.max_draft_len)
@@ -839,13 +844,18 @@ def create_torch_sampler_args(mapping: Mapping, *, max_seq_len: int,
                              use_overlap_scheduler=use_overlap_scheduler)
 
 
-def instantiate_sampler(engine: PyTorchModelEngine,
-                        pytorch_backend_config: PyTorchConfig, mapping: Mapping,
-                        max_batch_size: int, max_beam_width: int,
-                        max_seq_len: int, mm_encoder_only: bool,
-                        speculative_config: SpeculativeConfig,
-                        decoding_config: trtllm.DecodingConfig,
-                        kv_cache_config: KvCacheConfig):
+def instantiate_sampler(
+    engine: PyTorchModelEngine,
+    pytorch_backend_config: PyTorchConfig,
+    mapping: Mapping,
+    max_batch_size: int,
+    max_beam_width: int,
+    max_seq_len: int,
+    mm_encoder_only: bool,
+    speculative_config: SpeculativeConfig,
+    decoding_config: trtllm.DecodingConfig,
+    kv_cache_config: KvCacheConfig,
+):
     sampler_args = create_torch_sampler_args(
         mapping,
         max_seq_len=engine.max_seq_len,
